@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Controls.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/Controls.inputactions'
 
 using System;
 using System.Collections;
@@ -15,11 +15,11 @@ public class @Controls : IInputActionCollection, IDisposable
     ""name"": ""Controls"",
     ""maps"": [
         {
-            ""name"": ""Movement"",
+            ""name"": ""Main"",
             ""id"": ""84ed203e-b0c9-46e0-87ad-4d7a1f27cfcf"",
             ""actions"": [
                 {
-                    ""name"": ""Space"",
+                    ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""04ef569a-828e-46d1-8440-4767f739dd3a"",
                     ""expectedControlType"": ""Button"",
@@ -27,7 +27,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""LeftRight"",
+                    ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""fd5e2375-e561-422a-aeb9-382ab56c4cd9"",
                     ""expectedControlType"": ""Axis"",
@@ -43,7 +43,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Space"",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -54,7 +54,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftRight"",
+                    ""action"": ""Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -65,7 +65,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftRight"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -76,7 +76,7 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""LeftRight"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -85,10 +85,10 @@ public class @Controls : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // Movement
-        m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
-        m_Movement_Space = m_Movement.FindAction("Space", throwIfNotFound: true);
-        m_Movement_LeftRight = m_Movement.FindAction("LeftRight", throwIfNotFound: true);
+        // Main
+        m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
+        m_Main_Jump = m_Main.FindAction("Jump", throwIfNotFound: true);
+        m_Main_Move = m_Main.FindAction("Move", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -135,49 +135,49 @@ public class @Controls : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // Movement
-    private readonly InputActionMap m_Movement;
-    private IMovementActions m_MovementActionsCallbackInterface;
-    private readonly InputAction m_Movement_Space;
-    private readonly InputAction m_Movement_LeftRight;
-    public struct MovementActions
+    // Main
+    private readonly InputActionMap m_Main;
+    private IMainActions m_MainActionsCallbackInterface;
+    private readonly InputAction m_Main_Jump;
+    private readonly InputAction m_Main_Move;
+    public struct MainActions
     {
         private @Controls m_Wrapper;
-        public MovementActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Space => m_Wrapper.m_Movement_Space;
-        public InputAction @LeftRight => m_Wrapper.m_Movement_LeftRight;
-        public InputActionMap Get() { return m_Wrapper.m_Movement; }
+        public MainActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Jump => m_Wrapper.m_Main_Jump;
+        public InputAction @Move => m_Wrapper.m_Main_Move;
+        public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MovementActions set) { return set.Get(); }
-        public void SetCallbacks(IMovementActions instance)
+        public static implicit operator InputActionMap(MainActions set) { return set.Get(); }
+        public void SetCallbacks(IMainActions instance)
         {
-            if (m_Wrapper.m_MovementActionsCallbackInterface != null)
+            if (m_Wrapper.m_MainActionsCallbackInterface != null)
             {
-                @Space.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
-                @Space.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
-                @Space.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnSpace;
-                @LeftRight.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnLeftRight;
-                @LeftRight.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnLeftRight;
-                @LeftRight.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnLeftRight;
+                @Jump.started -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnJump;
+                @Move.started -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_MainActionsCallbackInterface.OnMove;
             }
-            m_Wrapper.m_MovementActionsCallbackInterface = instance;
+            m_Wrapper.m_MainActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Space.started += instance.OnSpace;
-                @Space.performed += instance.OnSpace;
-                @Space.canceled += instance.OnSpace;
-                @LeftRight.started += instance.OnLeftRight;
-                @LeftRight.performed += instance.OnLeftRight;
-                @LeftRight.canceled += instance.OnLeftRight;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
             }
         }
     }
-    public MovementActions @Movement => new MovementActions(this);
-    public interface IMovementActions
+    public MainActions @Main => new MainActions(this);
+    public interface IMainActions
     {
-        void OnSpace(InputAction.CallbackContext context);
-        void OnLeftRight(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
     }
 }
