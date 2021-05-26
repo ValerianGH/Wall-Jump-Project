@@ -72,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         spriterenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        PhysicsMaterial2D = GetComponent<Physic>();
     }
 
     void Update()
@@ -81,9 +80,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
         }
-
-        isGrounded = GetComponent.<PhysicsMaterial2D>(new Vector2(0, 0));
-        new Vector2(0, Ground);
 
         var hit = Physics2D.Raycast(transform.position, new Vector2(0, -1), 0.001f);
         if ((hit.collider )!= null)
