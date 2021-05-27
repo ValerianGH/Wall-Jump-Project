@@ -8,17 +8,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float maxspeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private bool wallJumpForce;
     [SerializeField] private Transform RaycastStartTransform;
 
     private Controls controls;
     private Rigidbody2D rb2D;
     private float direction;
     private bool canJump = false;
+    private bool wallJump = false;
     private SpriteRenderer spriterenderer;
     private Animator animator;
-    private bool moving;
-    private bool jump;
 
     private void OnEnable()
     {
@@ -31,12 +29,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void JumpOnperformed(InputAction.CallbackContext obj) //prend l'info si l'input espace est enfoncé
     {
-        if (canJump) //fait référence à un boolean qui est dans le code void Update()
+        if (wallJump) //fait référence à un boolean qui est dans le code void Update()
         {
             rb2D.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
 
-        if (wallJumpForce) //fait référence à un boolean qui est dans le code void Update()
+        if (canJump) //fait référence à un boolean qui est dans le code void Update()
         {
             rb2D.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
@@ -79,28 +77,6 @@ public class PlayerMovement : MonoBehaviour
         {
             canJump = false; //on ne peut pas sauter
         }
-
-        //Animations du Player
-        {
-            if (moving == true)
-            {
-                animator.SetBool("moving", true);
-            }
-
-            if (moving == false)
-            {
-                animator.SetBool("moving", false);
-            }
-
-            if (jump == true)
-            {
-                animator.SetBool("jump"), true);
-            }
-            else (jump == false)
-            {
-                animator.SetBool("jump"), false);
-            }
-        }
     }
 
     private void FixedUpdate()
@@ -110,18 +86,21 @@ public class PlayerMovement : MonoBehaviour
         {
             rb2D.AddForce(new Vector2(speed * direction, 0));
         }
+
+        float characterVelocity = Mathf.Abs(rb2D.velocity.x);
+        animator.SetFloat("speed", characterVelocity);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.contacts[0].normal.x == 0) // plafond ( 0 , -1) sol ( 0 , 1 )
+        if (collision.contacts[0].normal.y == 0) // plafond ( 0 , -1) sol ( 0 , 1 )
         {
-            canJump = true;
+            wallJump = true;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        canJump = false;
+        wallJump = false;
     }
 }

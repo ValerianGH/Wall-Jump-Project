@@ -37625,8 +37625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 40
   maxspeed: 40
-  jumpForce: 14.5
-  wallJumpForce: 0
+  jumpForce: 10
   RaycastStartTransform: {fileID: 2060002644}
 --- !u!58 &2060002646
 CircleCollider2D:
