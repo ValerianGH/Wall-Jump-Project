@@ -8,63 +8,56 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float maxspeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float rollForce;
-    /*
-    [SerializeField] private float wallJump;
-    [SerializeField] private float wallJumpForce;
-    [SerializeField] private float wallSlide;
-    [SerializeField] private float wallSlideSpeed;
-    */
+    [SerializeField] private bool wallJumpForce;
     [SerializeField] private Transform RaycastStartTransform;
 
-    public Animator animator;
-    private SpriteRenderer spriterenderer;
-    private Rigidbody2D rb2D;
     private Controls controls;
+    private Rigidbody2D rb2D;
     private float direction;
     private bool canJump = false;
+    private SpriteRenderer spriterenderer;
+    private Animator animator;
     private bool moving;
     private bool jump;
-    private bool isGrounded;
-    public PhysicsMaterial2D Material;
-    public LayerMask Ground;
 
     private void OnEnable()
     {
         controls = new Controls();
         controls.Enable();
-        controls.Main.Move.performed += MovePerformed;
-        controls.Main.Move.canceled += MoveCanceled;
         controls.Main.Jump.performed += JumpOnperformed;
+        controls.Main.Move.performed += MoveOnperformed;
+        controls.Main.Move.canceled += MoveOncanceled;
     }
 
-    private void JumpOnperformed(InputAction.CallbackContext obj)
+    private void JumpOnperformed(InputAction.CallbackContext obj) //prend l'info si l'input espace est enfoncé
     {
-        if (canJump)
+        if (canJump) //fait référence à un boolean qui est dans le code void Update()
         {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-            canJump = false;
+            rb2D.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+        }
+
+        if (wallJumpForce) //fait référence à un boolean qui est dans le code void Update()
+        {
+            rb2D.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
     }
 
-    private void MoveCanceled(InputAction.CallbackContext obj)
+    private void MoveOncanceled(InputAction.CallbackContext obj)
     {
         direction = 0;
-        moving = false;
     }
 
-    private void MovePerformed(InputAction.CallbackContext obj)
+    private void MoveOnperformed(InputAction.CallbackContext obj) //on récupère 1 pour la flèche droite et -1 pour la flèche enfoncée
     {
         direction = obj.ReadValue<float>();
         if (direction > 0)
         {
             spriterenderer.flipX = false;
         }
-        else
+        else //(direction < 0)
         {
             spriterenderer.flipX = true;
         }
-        moving = true;
     }
 
     void Start()
@@ -76,49 +69,59 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("Space") && isGrounded)
+        var hit = Physics2D.Raycast(RaycastStartTransform.position, new Vector2(-1, 0), 0.001f);
+        //Debug.DrawRay(RaycastStartTransform.position, new Vector2(1, 0) * 0.001f);
+        if (hit.collider != null)
         {
-            rb2D.velocity = new Vector2(rb2D.velocity.x, jumpForce);
+            canJump = true; //on peut sauter
+        }
+        else
+        {
+            canJump = false; //on ne peut pas sauter
         }
 
-        var hit = Physics2D.Raycast(transform.position, new Vector2(0, -1), 0.001f);
-        if ((hit.collider )!= null)
+        //Animations du Player
+        {
+            if (moving == true)
+            {
+                animator.SetBool("moving", true);
+            }
 
+            if (moving == false)
+            {
+                animator.SetBool("moving", false);
+            }
+
+            if (jump == true)
+            {
+                animator.SetBool("jump"), true);
+            }
+            else (jump == false)
+            {
+                animator.SetBool("jump"), false);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        var horizontalSpeed = Mathf.Abs(rb2D.velocity.x);
+        if (horizontalSpeed < maxspeed)
+        {
+            rb2D.AddForce(new Vector2(speed * direction, 0));
+        }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.contacts[0].normal.x == 0) // plafond ( 0 , -1) sol ( 0 , 1 )
         {
             canJump = true;
         }
-        else
-        {
-            canJump = false;
-        }
-        
-        if (moving == true)
-        {
-            animator.SetBool("moving", true);
-        }
+    }
 
-        else
-        {
-            animator.SetBool("moving", false);
-        }
-
-        if (jump == true)
-        {
-            animator.SetBool("jump", true);
-        }
-
-        else
-        {
-            animator.SetBool("jump", false);
-        }
-
-        void FixedUpdate()
-        {
-            var horizontalSpeed = Mathf.Abs(rb2D.velocity.x);
-            if (horizontalSpeed < maxspeed)
-            {
-                rb2D.AddForce(new Vector2(speed * direction, 0));
-            }
-        }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        canJump = false;
     }
 }
